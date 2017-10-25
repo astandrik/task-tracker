@@ -1,8 +1,8 @@
 /* eslint consistent-return:0 */
-
+const fs = require('fs');
+const path = require('path');
 const express = require('express');
 const logger = require('./logger');
-
 const argv = require('./argv');
 const port = require('./port');
 const setup = require('./middlewares/frontendMiddleware');
@@ -14,10 +14,16 @@ const app = express();
 // If you need a backend, e.g. an API, add your custom backend-specific middleware here
 // app.use('/api', myApi);
 
+app.use('/api/tasks', (req, res) => {
+    fs.readFile(path.join(__dirname, '/tasks.json'), 'utf8', (err, data) => {
+        res.send(JSON.parse(data));
+    });
+});
+
 // In production we need to pass these values in instead of relying on webpack
 setup(app, {
-  outputPath: resolve(process.cwd(), 'build'),
-  publicPath: '/',
+    outputPath: resolve(process.cwd(), 'build'),
+    publicPath: '/',
 });
 
 // get the intended host and port number, use localhost and port 3000 if not provided
@@ -27,20 +33,20 @@ const prettyHost = customHost || 'localhost';
 
 // Start your app.
 app.listen(port, host, (err) => {
-  if (err) {
-    return logger.error(err.message);
-  }
+    if (err) {
+        return logger.error(err.message);
+    }
 
   // Connect to ngrok in dev mode
-  if (ngrok) {
-    ngrok.connect(port, (innerErr, url) => {
-      if (innerErr) {
-        return logger.error(innerErr);
-      }
+    if (ngrok) {
+        ngrok.connect(port, (innerErr, url) => {
+            if (innerErr) {
+                return logger.error(innerErr);
+            }
 
-      logger.appStarted(port, prettyHost, url);
-    });
-  } else {
-    logger.appStarted(port, prettyHost);
-  }
+            logger.appStarted(port, prettyHost, url);
+        });
+    } else {
+        logger.appStarted(port, prettyHost);
+    }
 });
