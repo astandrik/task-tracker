@@ -16,7 +16,8 @@ import injectReducer from 'utils/injectReducer';
 import makeSelectTaskList from './selectors';
 import reducer from './reducer';
 import saga from './saga';
-import { getTasks } from './actions';
+import { getTasks, updateTaskValue } from './actions';
+import Task from '../../components/Task';
 
 export class TaskList extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
     componentDidMount() {
@@ -26,7 +27,7 @@ export class TaskList extends React.PureComponent { // eslint-disable-line react
     render() {
         const tasks = this.props.taskList.tasks.map((task) => (
             <div key={task.id}>
-                  <span>{ task.message }</span>
+                  <Task task={task} updateTaskValue={this.props.updateTaskValue} />
             </div>
         ));
         return (
@@ -43,6 +44,7 @@ export class TaskList extends React.PureComponent { // eslint-disable-line react
 
 TaskList.propTypes = {
     fetchTasks: PropTypes.func.isRequired,
+    updateTaskValue: PropTypes.func.isRequired,
     taskList: PropTypes.shape({
         tasks: PropTypes.arrayOf(PropTypes.shape({}))
     })
@@ -56,6 +58,9 @@ function mapDispatchToProps(dispatch) {
     return {
         fetchTasks: () => {
             dispatch(getTasks());
+        },
+        updateTaskValue: ({ id, value }) => {
+            dispatch(updateTaskValue({ id, value }));
         }
     };
 }

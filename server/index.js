@@ -5,11 +5,16 @@ const express = require('express');
 const logger = require('./logger');
 const argv = require('./argv');
 const port = require('./port');
+const bodyParser = require('body-parser');
 const setup = require('./middlewares/frontendMiddleware');
 const isDev = process.env.NODE_ENV !== 'production';
 const ngrok = (isDev && process.env.ENABLE_TUNNEL) || argv.tunnel ? require('ngrok') : false;
 const resolve = require('path').resolve;
 const app = express();
+
+// parse application/json
+app.use(bodyParser.json());
+
 
 // If you need a backend, e.g. an API, add your custom backend-specific middleware here
 // app.use('/api', myApi);
@@ -21,8 +26,18 @@ app.get('/api/tasks', (req, res) => {
 });
 
 app.post('/api/tasks', (req, res) => {
-    console.log(req);
+    const id = req.body.id;
+    const value = req.body.value;
+    fs.readFile(path.join(__dirname, '/tasks.json'), 'utf8', (err, data) => {
+        const parsed = JSON.parse(data);
+        const dataObj = parsed.tasks.filter((x) => x.id === id)[0];
+        dataObj.message = value;
+        fs.writeFile(path.join(__dirname, '/tasks.json'), JSON.stringify(parsed), (error) => {
+            res.send(error);
+        });
+    });
 });
+
 
 // In production we need to pass these values in instead of relying on webpack
 setup(app, {
