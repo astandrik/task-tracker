@@ -6,15 +6,17 @@
 
 import { fromJS } from 'immutable';
 import {
-  DEFAULT_ACTION,
+  SET_TASKS
 } from './constants';
 
-const initialState = fromJS({});
+const initialState = fromJS({
+    tasks: []
+});
 
 function taskListReducer(state = initialState, action) {
     switch (action.type) {
-        case DEFAULT_ACTION:
-            return state;
+        case SET_TASKS:
+            return state.set('tasks', action.data);
         default:
             return state;
     }

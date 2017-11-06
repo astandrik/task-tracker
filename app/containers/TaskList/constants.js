@@ -4,4 +4,5 @@
  *
  */
 
-export const DEFAULT_ACTION = 'app/TaskList/DEFAULT_ACTION';
+export const GET_TASKS = 'GET_TASKS';
+export const SET_TASKS = 'SET_TASKS';

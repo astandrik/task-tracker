@@ -14,10 +14,14 @@ const app = express();
 // If you need a backend, e.g. an API, add your custom backend-specific middleware here
 // app.use('/api', myApi);
 
-app.use('/api/tasks', (req, res) => {
+app.get('/api/tasks', (req, res) => {
     fs.readFile(path.join(__dirname, '/tasks.json'), 'utf8', (err, data) => {
         res.send(JSON.parse(data));
     });
+});
+
+app.post('/api/tasks', (req, res) => {
+    console.log(req);
 });
 
 // In production we need to pass these values in instead of relying on webpack
