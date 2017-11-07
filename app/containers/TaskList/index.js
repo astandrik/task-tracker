@@ -10,13 +10,15 @@ import { connect } from 'react-redux';
 import { Helmet } from 'react-helmet';
 import { createStructuredSelector } from 'reselect';
 import { compose } from 'redux';
+import { autobind } from 'core-decorators';
+import RaisedButton from 'material-ui/RaisedButton';
 
 import injectSaga from 'utils/injectSaga';
 import injectReducer from 'utils/injectReducer';
 import makeSelectTaskList from './selectors';
 import reducer from './reducer';
 import saga from './saga';
-import { getTasks, updateTaskValue } from './actions';
+import { getTasks, updateTaskValue, addTask, deleteTask } from './actions';
 import Task from '../../components/Task';
 
 export class TaskList extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
@@ -24,10 +26,15 @@ export class TaskList extends React.PureComponent { // eslint-disable-line react
         this.props.fetchTasks();
     }
 
+    @autobind
+    handleTaskAdd() {
+        this.props.addTask();
+    }
+
     render() {
         const tasks = this.props.taskList.tasks.map((task) => (
             <div key={task.id}>
-                  <Task task={task} updateTaskValue={this.props.updateTaskValue} />
+                  <Task task={task} updateTaskValue={this.props.updateTaskValue} deleteTask={this.props.deleteTask}/>
             </div>
         ));
         return (
@@ -37,6 +44,11 @@ export class TaskList extends React.PureComponent { // eslint-disable-line react
               <meta name="description" content="Description of TaskList" />
             </Helmet>
             { tasks }
+            <RaisedButton
+                label="Добавить"
+                primary
+                onClick={this.handleTaskAdd}
+            />
           </div>
         );
     }
@@ -44,6 +56,8 @@ export class TaskList extends React.PureComponent { // eslint-disable-line react
 
 TaskList.propTypes = {
     fetchTasks: PropTypes.func.isRequired,
+    addTask: PropTypes.func.isRequired,
+    deleteTask: PropTypes.func.isRequired,
     updateTaskValue: PropTypes.func.isRequired,
     taskList: PropTypes.shape({
         tasks: PropTypes.arrayOf(PropTypes.shape({}))
@@ -61,6 +75,12 @@ function mapDispatchToProps(dispatch) {
         },
         updateTaskValue: ({ id, value }) => {
             dispatch(updateTaskValue({ id, value }));
+        },
+        addTask: () => {
+            dispatch(addTask());
+        },
+        deleteTask: ({ id }) => {
+            dispatch(deleteTask({ id }));
         }
     };
 }
