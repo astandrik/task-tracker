@@ -4,6 +4,7 @@ pipeline {
         stage('Build docker') {
             steps {
                 sh 'docker rmi task_tracker_image || echo "image task_tracker_image does not exist"'
+                sh 'rm -rf node_modules/'
                 sh 'docker build -t task_tracker_image .'
             }
         }
