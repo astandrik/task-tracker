@@ -3,15 +3,15 @@ pipeline {
     stages {
         stage('Build docker') {
             steps {
-                sh 'docker rmi task_tracker_image || echo "image task_tracker_image does not exist"'
+                sh 'docker rmi task_tracker || echo "image task_tracker does not exist"'
                 sh 'rm -rf node_modules/'
-                sh 'docker build -t task_tracker_image .'
+                sh 'docker build -t task_tracker .'
             }
         }
         stage('Deploy') {
  	        steps {
-               sh 'docker rm -f task-tracker-container || echo "container task-tracker-container does not exist"'
-	           sh 'docker run -p 3000:3000 --name task-tracker-container task_tracker_image npm run start:prod &'
+               sh 'docker rm -f task-tracker-contain || echo "container task-tracker-contain does not exist"'
+	           sh 'docker run -p 3000:3000 --name task-tracker-contain task_tracker npm run start:prod &'
 	         }
 	    }
     }
