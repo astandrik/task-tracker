@@ -3,3 +3,4 @@ FROM node:6-alpine
 RUN mkdir -p /src
 ADD ./db /src
 WORKDIR /src
+RUN npm i
