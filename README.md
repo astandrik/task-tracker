@@ -152,3 +152,7 @@ This project would not be possible without the support by these amazing folks. [
 
 This project is licensed under the MIT license, Copyright (c) 2017 Maximilian
 Stoiber. For more information see `LICENSE.md`.
+
+
+sh 'docker build -f ./DataBaseDockerfile -t task_tracker_server .'
+sh 'docker run -p 3010:3000 --name task-tracker-server-contain task_tracker_server node index.js'
