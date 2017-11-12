@@ -155,4 +155,4 @@ Stoiber. For more information see `LICENSE.md`.
 
 
 sh 'docker build -f ./DataBaseDockerfile -t task_tracker_server .'
-sh 'docker run -p 3010:3000 --name task-tracker-server-contain task_tracker_server node index.js'
+sh 'docker run -p 3010:3000 --name task-tracker-server-contain task_tracker_server node db/index.js'
