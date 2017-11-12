@@ -17,7 +17,7 @@ pipeline {
         stage('Deploy') {
  	        steps {
 	           sh 'docker run -p 3000:80 --name task-tracker-contain task_tracker npm run start:prod &'
-               sh 'docker run -p 3010:3000 --name task-tracker-contain task_tracker_server node index.js'
+               sh 'docker run -p 3010:3000 --name task-tracker-server-contain task_tracker_server node index.js'
 	         }
 	    }
     }
