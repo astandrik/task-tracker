@@ -6,6 +6,9 @@ pipeline {
                 sh 'docker stop task-tracker-contain || echo "container task-tracker-contain is not running"'
                 sh 'docker rm -f task-tracker-contain || echo "container task-tracker-contain does not exist"'
                 sh 'docker rmi task_tracker || echo "image task_tracker does not exist"'
+                sh 'docker stop task-tracker-server-contain || echo "container task-tracker-server-contain is not running"'
+                sh 'docker rm -f task-tracker-server-contain || echo "container task-tracker-server-contain does not exist"'
+                sh 'docker rmi task_tracker_server || echo "image task_tracker_server does not exist"'
             }
         }
         stage('Build dockers') {
